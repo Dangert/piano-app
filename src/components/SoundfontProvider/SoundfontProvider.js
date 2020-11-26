@@ -102,8 +102,8 @@ class SoundfontProvider extends React.Component {
     const { activeAudioNodes } = this.state;
     const { audioContext } = this.props;
     audioContext.resume().then(() => {
-      const activeAudioNodes = Object.values(activeAudioNodes);
-      activeAudioNodes.forEach(node => {
+      const audioNodes = Object.values(activeAudioNodes);
+      audioNodes.forEach(node => {
         if (node) {
           node.stop();
         }
