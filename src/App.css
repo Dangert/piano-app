@@ -2,37 +2,50 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.hint_key.ReactPiano__Key--natural {
+  background: #d9ea8a;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.hint_key.ReactPiano__Key--accidental {
+  background: #9eb04e;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.answer_key.ReactPiano__Key--natural {
+  background: #92e5fa;
 }
 
-.App-link {
-  color: #61dafb;
+.answer_key.ReactPiano__Key--accidental {
+  background: #389eb7;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.piano-div {
+  position: relative;
+}
+
+.piano-div.easy {
+  padding: 8% 30%;
+}
+
+.piano-div.hard {
+  padding: 8% 5%;
+}
+
+.piano-div.crazy {
+  padding: 8% 5%;
+}
+
+.responsive-piano{
+  position: absolute;
+  top: 45%;
+  -ms-transform: translateY(-45%);
+  transform: translateY(-45%);
+}
+
+.particles {
+  position: fixed;
+  top: 0;
+  right: 0;
+  botton: 0;
+  left: 0;
+  z-index: -1;
 }

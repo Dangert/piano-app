@@ -1,0 +1,8 @@
+.user-info {
+  width: 250px;
+  height: auto;
+  margin: 20px auto;
+  border-radius: 25px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(252,161,39,0.4), rgba(249,204,135,0.4));
+}
