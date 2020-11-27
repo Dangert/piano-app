@@ -19,26 +19,23 @@
 }
 
 .piano-div {
-  position: relative;
+  padding: 0 10%;
 }
 
 .piano-div.easy {
-  padding: 8% 30%;
+
 }
 
 .piano-div.hard {
-  padding: 8% 5%;
+
 }
 
 .piano-div.crazy {
-  padding: 8% 5%;
+
 }
 
 .responsive-piano{
-  position: absolute;
-  top: 45%;
-  -ms-transform: translateY(-45%);
-  transform: translateY(-45%);
+
 }
 
 .particles {
