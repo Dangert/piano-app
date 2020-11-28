@@ -14,9 +14,6 @@ import './App.css';
 import { Levels, LevelConf } from './modules/levels.js'
 const Routes = require('./modules/routes.js');
 
-// webkitAudioContext fallback needed to support Safari
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
 const initialState = {
   route: Routes.SIGN_IN,
   currGame: {
@@ -55,9 +52,19 @@ const initialState = {
 class App extends Component {
   constructor() {
     super();
+    this.audioContext = null;
     this.scheduledEvents = [];
     this.areRecordsUpdated = false;
     this.state = initialState;
+  }
+
+  // Init audio context when needed - to avoid warning for audio context
+  getAudioContext = () => {
+    if (!this.audioContext) {
+      // webkitAudioContext fallback needed to support Safari
+      this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return this.audioContext;
   }
 
   onRouteChange = (route) => {
@@ -65,7 +72,7 @@ class App extends Component {
     const isSignedIn = (route === Routes.SIGN_UP || route === Routes.SIGN_IN) ? false : true;
     this.setState({route: route, isSignedIn: isSignedIn});
 
-    if (!isSignedIn && !isStateClean) { // When signing out, clean home
+    if (!isSignedIn && !isStateClean) { // When signing out, clean state
       this.setState(initialState);
     }
   }
@@ -88,23 +95,24 @@ class App extends Component {
   getHintLimits = (level, note) => {
     var limitRemainder = 0; // In case note is close to the limit by less than rangeHintNotes/2
     const rangeHintNotes = LevelConf[level].rangeHintNotes;
+    const halfRangeHintNotes = Math.round(rangeHintNotes/2)
     const pianoFirst = LevelConf[level].noteRanges.first;
     const pianoLast = LevelConf[level].noteRanges.last;
     var hintFirst;
     var hintLast;
-    if (note - pianoFirst < rangeHintNotes/2) {
-      limitRemainder = rangeHintNotes/2 - (note - pianoFirst);
+    if (note - pianoFirst < halfRangeHintNotes) {
+      limitRemainder = halfRangeHintNotes - (note - pianoFirst);
       hintFirst = pianoFirst;
-      hintLast = note + rangeHintNotes/2 + limitRemainder;
+      hintLast = note + halfRangeHintNotes + limitRemainder;
     }
-    else if (pianoLast - note < rangeHintNotes/2){
-      limitRemainder = rangeHintNotes/2 - (pianoLast - note);
-      hintFirst = note - rangeHintNotes/2 - limitRemainder;
+    else if (pianoLast - note < halfRangeHintNotes){
+      limitRemainder = halfRangeHintNotes - (pianoLast - note);
+      hintFirst = note - halfRangeHintNotes - limitRemainder;
       hintLast = pianoLast;
     }
     else {
-      hintFirst = note - rangeHintNotes/2;
-      hintLast = note + rangeHintNotes/2;
+      hintFirst = note - halfRangeHintNotes;
+      hintLast = note + halfRangeHintNotes;
     }
     const hintLimits = Array(hintLast - hintFirst + 1).fill().map((_, idx) => hintFirst + idx);
     return hintLimits;
@@ -132,7 +140,7 @@ class App extends Component {
 
   playGameNote = () => {
     const { currGame } = this.state;
-    playSingleNote(audioContext, currGame.note);
+    playSingleNote(this.getAudioContext(), currGame.note);
   }
 
   removePrevHintNotes = (hintNotes, level) => {
@@ -342,7 +350,7 @@ class App extends Component {
                 <UserInfo user={user}/>
                 <div className={"piano-div " + currGame.level}>
                   <ResponsivePiano className='responsive-piano' noteRange={LevelConf[currGame.level].noteRanges}
-                  handleGuess={this.handleGuess} activeNotes={winningChord.activeNotes} audioContext={audioContext}/>
+                  handleGuess={this.handleGuess} activeNotes={winningChord.activeNotes} audioContext={this.getAudioContext()}/>
                 </div>
                 <GameControl displayGame={currGame.note === -1 ? false : true}
                 startNewGame={this.startNewGame} playGameNote={this.playGameNote}
