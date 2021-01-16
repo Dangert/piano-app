@@ -1,4 +1,4 @@
-# Guess the Note (Server)
+# Guess the Note (UI)
 
 ## Summary
 
